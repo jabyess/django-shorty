@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 rope = "*"
+autopep8 = "*"
 
 [packages]
 django = "*"
