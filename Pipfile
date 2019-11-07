@@ -4,10 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+rope = "*"
 
 [packages]
 django = "*"
 psycopg2-binary = "*"
+shortid = "*"
 
 [requires]
 python_version = "3.6"
