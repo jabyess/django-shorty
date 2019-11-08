@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http.response import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.validators import URLValidator
+from .utils import build_short_url
 from .models import Link, Stats
 from shortid import ShortId
 import json
@@ -43,15 +44,10 @@ def make_link(request):
 
         # generate shortid and make new url in db
         shorty = sid.generate()
-        host = request.get_host()
-        secure = request.is_secure()
-        short_url = ""
-        if secure:
-            short_url = f"https://{host}/{shorty}"
-        else:
-            short_url = f"http://{host}/{shorty}"
+        short_url = build_short_url(request.is_secure(), request.get_host(), shorty)
 
         link = Link(long=url, short=short_url)
+        print(link.stats)
         link.save()
 
         return JsonResponse({'shorturl': link.short})
@@ -59,10 +55,18 @@ def make_link(request):
     return HttpResponse(status=400, content="Bad request body or wrong request type (POST only)")
 
 
-def get_link(request, url):
-    # Link.get
-    return HttpResponse(url)
+def get_link(request, shortid):
+    if request.method == "GET":
+        short_url = build_short_url(request.is_secure(), request.get_host(), shortid)
+
+        # look up long url and return redirect
+        try:
+            link = Link.objects.get(short=short_url)
+        except:
+            return HttpResponse(status=404, content="No url with that structure")
+
+        return redirect(link.long)
+
+    return HttpResponse(status=400)
 
 
-def generate_short_url(long_url):
-    pass

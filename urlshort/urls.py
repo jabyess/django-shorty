@@ -19,7 +19,6 @@ from shortener import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.noop),
     path('create', views.make_link),
-    path('<url>', views.get_link)
+    path('<str:shortid>', views.get_link)
 ]
