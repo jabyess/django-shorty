@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 from django.core.validators import URLValidator
 
 # Create your models here.
@@ -6,14 +7,14 @@ from django.core.validators import URLValidator
 class Link(models.Model):
     long = models.URLField()
     short = models.URLField()
+    created = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
-        return self.long
+        return f"Long: {self.long} \n Short: {self.short}"
 
-class Stats(models.Model):
+class Visit(models.Model):
     link = models.ForeignKey(Link, on_delete=models.CASCADE, related_name="link")
-    total_visits = models.IntegerField()
-    visits = models.DateTimeField()
+    visit = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
-        return self.total_visits
+        return str(self.visit)
