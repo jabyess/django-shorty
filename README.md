@@ -39,4 +39,24 @@ don't need a whole ORM, I can just wing it". I got quickly overwhelmed by all
 the research and choices and figuring out how to wire up a database to the flask
 app. Plus I know django much better, so I was able to be much more productive.
 
-My first django iteration had two models - Link and Stats. 
+My first django iteration had two models - Link and Stats, with Stats having a
+property called `visits`. I realized later (after reading more thoroughly) that
+I needed to record each page visit historically, so I renamed `Stats` to `Visit`
+and gave `visit` a datetime property with default timestamp. Now each visit is
+its own row, which makes writing records much easier (they're stateless and I
+don't have to do the incrementing/counting logic myself). This also makes
+querying more flexible, since I am using sql commands (via the ORM) instead of
+python business logic.
+
+I spent a fair amount of time on validation - making sure the POST request
+contained the right keys and that the url provided was a valid URL. I know there
+are better ways to do this (you can pass the validator into the model) but it'll
+require some more thought and research.
+
+Also, its possible to cause a 500 error by sending malformed json, since I'm not
+handling any exceptions around the parsing.
+
+Given some more time, I'd like to add tests and figure out a more sane and
+django-y way to handle all the validation.
+
+Overall, this was a fun project and a good refresher for me on django.

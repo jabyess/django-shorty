@@ -1,6 +1,5 @@
 from django.db import models
 from datetime import datetime
-from django.core.validators import URLValidator
 
 # Create your models here.
 
